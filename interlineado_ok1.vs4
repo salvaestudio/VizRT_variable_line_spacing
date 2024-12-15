@@ -1,0 +1,63 @@
+
+' INTERLINEADO OK PROBADO EN VIZ ARTIST
+
+
+' Variables globales
+dim textContainer as Container
+
+' Subrutina que se ejecuta al inicializar el script
+sub OnInit()
+    ' Obtener el contenedor de texto
+    textContainer = Scene.FindContainer("txt1")
+    if textContainer <> Null then
+        ' Llamar a la subrutina para ajustar el interlineado
+        adjustLineSpacing()
+    else
+        println("TextContainer no encontrado.")
+    end if
+end sub
+
+' Subrutina para ajustar el interlineado
+sub adjustLineSpacing()
+    ' Definir variables
+    dim text as String
+    dim hasLowLetters as Boolean
+    dim lineSpacing as Double
+    dim i as Integer
+
+    ' Obtener el texto del objeto de texto
+    text = textContainer.Geometry.Text
+
+    ' Inicializar la variable de letras bajas
+    hasLowLetters = false
+
+    ' Verificar si el texto contiene letras bajas
+	dim char as String
+
+    for i = 0 to Len(text)
+		char = text.GetChar(i)
+		Println(char)
+        select case char
+            case "j", "q", "p", "g", "y"
+				hasLowLetters = true
+				exit for ' Salir del bucle si se encuentra una letra baja
+        end select
+    next
+
+    ' Ajustar el interlineado basado en la presencia de letras bajas
+    if hasLowLetters = true then
+        lineSpacing = 14  ' Valor del interlineado si hay letras bajas
+    else
+        lineSpacing = -12  ' Valor del interlineado si no hay letras bajas
+    end if
+
+    ' Aplicar el interlineado al objeto de texto
+    SetLineSpacing(lineSpacing)
+end sub
+
+' Subrutina para establecer el interlineado de un objeto de texto
+sub SetLineSpacing(spacing as Double)
+    ' Establecer el valor de interlineado
+    textContainer.Geometry.LineSpacing = spacing
+    ' Scene.LogMessage("Interlineado establecido a " & spacing)
+end sub
